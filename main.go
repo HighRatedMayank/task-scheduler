@@ -43,7 +43,6 @@ func createJob(c *gin.Context) {
 		return
 	}
 
-	// 1. Defaults (Run in 1 minute, retry 3 times)
 	if input.MaxRetryCount == 0 {
 		input.MaxRetryCount = 3
 	}
@@ -67,7 +66,7 @@ func createJob(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to start transaction"})
 		return
 	}
-	// Defer rollback: if the function exits before tx.Commit(), it rolls back safely
+
 	defer tx.Rollback(ctx) 
 
 	// 4. Insert into 'jobs' table
